@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/merulis/shuffle/src/domain"
 	"github.com/merulis/shuffle/src/github"
 )
 
@@ -20,25 +21,14 @@ func main() {
 	if token == "" {
 		fmt.Println("token is empty")
 	}
-	client := github.NewClient(token)
-
-	items, err := client.GetListContent(
+	ghClient := github.NewClient(token)
+	ghStorage := github.NewStorage(ghClient, "cli", "cli")
+	items, err := ghStorage.List(
 		context.Background(),
-		"cli",
-		"cli",
-		"cmd",
-		"trunk",
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	content, err := client.GetFileContent(
-		context.Background(),
-		"cli",
-		"cli",
-		"go.mod",
-		"trunk",
+		domain.Locator{
+			Path: "cmd",
+			Ref:  "trunk",
+		},
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -46,6 +36,17 @@ func main() {
 
 	for _, item := range items {
 		fmt.Printf("%-4s %-8d %s\n", item.Type, item.Size, item.Path)
+	}
+
+	content, err := ghStorage.Read(
+		context.Background(),
+		domain.Locator{
+			Path: "go.mod",
+			Ref:  "trunk",
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	fmt.Println(string(content))
