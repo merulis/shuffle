@@ -9,10 +9,10 @@ import (
 	"github.com/merulis/shuffle/src/github"
 )
 
-func runView(args []string, client *github.Client) error {
+func runDownload(args []string, client *github.Client) error {
 	if len(args) < 3 {
 		usageView()
-		return fmt.Errorf("command view: bad args %v", args)
+		return fmt.Errorf("command donwload: bad args %v", args)
 	}
 
 	ref := ""
@@ -20,19 +20,21 @@ func runView(args []string, client *github.Client) error {
 		ref = args[3]
 	}
 
-	storage := github.NewAdapter(client, args[0], args[1])
+	dest := ""
+
+	source := github.NewAdapter(client, args[0], args[1])
 	loc := domain.NewLocator(args[2], ref)
 
-	uc := app.NewReadArtifact(storage)
+	uc := app.NewDownloadArtifact(source)
 
 	ctx := context.Background()
 
-	content, err := uc.Execute(ctx, loc)
+	file, err := uc.Execute(ctx, loc, dest)
 	if err != nil {
-		return fmt.Errorf("run command view: %w", err)
+		return fmt.Errorf("run command download: %w", err)
 	}
 
-	fmt.Println(string(content))
+	fmt.Println("saved: ", file)
 
 	return nil
 }

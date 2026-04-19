@@ -8,12 +8,12 @@ import (
 )
 
 type ReadArtifact struct {
-	storage domain.Storage
+	source domain.Source
 }
 
-func NewReadArtifact(storage domain.Storage) *ReadArtifact {
+func NewReadArtifact(source domain.Source) *ReadArtifact {
 	return &ReadArtifact{
-		storage: storage,
+		source: source,
 	}
 }
 
@@ -22,9 +22,9 @@ func (uc *ReadArtifact) Execute(ctx context.Context, loc domain.Locator) ([]byte
 		return nil, fmt.Errorf("read artifact: empty path")
 	}
 
-	data, err := uc.storage.Read(ctx, loc)
+	data, err := uc.source.Read(ctx, loc)
 	if err != nil {
-		return nil, fmt.Errorf("User case read artidact: %w", err)
+		return nil, fmt.Errorf("user case read artifact: %w", err)
 	}
 
 	return data, nil

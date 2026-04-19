@@ -9,3 +9,7 @@ func usageLs() {
 func usageView() {
 	fmt.Println("	shuffle view <owner> <repo> <path> [ref]")
 }
+
+func usageDownload() {
+	fmt.Println("	shuffle load <owner> <repo> <path> [ref]")
+}

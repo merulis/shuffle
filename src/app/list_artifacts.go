@@ -8,19 +8,19 @@ import (
 )
 
 type ListArtifacts struct {
-	storage domain.Storage
+	source domain.Source
 }
 
-func NewListArtifacts(storage domain.Storage) *ListArtifacts {
+func NewListArtifacts(source domain.Source) *ListArtifacts {
 	return &ListArtifacts{
-		storage: storage,
+		source: source,
 	}
 }
 
 func (uc *ListArtifacts) Execute(ctx context.Context, loc domain.Locator) ([]domain.Artifact, error) {
-	items, err := uc.storage.List(ctx, loc)
+	items, err := uc.source.List(ctx, loc)
 	if err != nil {
-		return nil, fmt.Errorf("User case list artidacts: %w", err)
+		return nil, fmt.Errorf("user case list artifacts: %w", err)
 	}
 
 	return items, nil

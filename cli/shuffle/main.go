@@ -24,6 +24,7 @@ func main() {
 
 	if err := run(os.Args, ghClient); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
+		os.Exit(1)
 	}
 }
 
@@ -31,7 +32,6 @@ func run(args []string, client *github.Client) error {
 	if len(args) < 2 {
 		printUsage()
 		return fmt.Errorf("command is required")
-		os.Exit(1)
 	}
 
 	command := args[1]
@@ -42,12 +42,14 @@ func run(args []string, client *github.Client) error {
 		return runLs(commandArgs, client)
 	case "view":
 		return runView(commandArgs, client)
+	case "load":
+		return runDownload(commandArgs, client)
 	case "help":
 		printUsage()
 		return nil
 	default:
 		printUsage()
-		return fmt.Errorf("unknown commad: %s", args[1])
+		return fmt.Errorf("unknown command: %s", args[1])
 	}
 }
 
@@ -55,4 +57,5 @@ func printUsage() {
 	fmt.Println("usage: shuffle <command> [args]")
 	usageLs()
 	usageView()
+	usageDownload()
 }

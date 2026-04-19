@@ -7,21 +7,21 @@ import (
 	"github.com/merulis/shuffle/src/domain"
 )
 
-type Storage struct {
+type Adapter struct {
 	client *Client
 	owner  string
 	repo   string
 }
 
-func NewStorage(client *Client, owner, repo string) *Storage {
-	return &Storage{
+func NewAdapter(client *Client, owner, repo string) *Adapter {
+	return &Adapter{
 		client,
 		owner,
 		repo,
 	}
 }
 
-func (s *Storage) List(ctx context.Context, loc domain.Locator) ([]domain.Artifact, error) {
+func (s *Adapter) List(ctx context.Context, loc domain.Locator) ([]domain.Artifact, error) {
 	items, err := s.client.GetListContent(
 		ctx,
 		s.owner,
@@ -41,7 +41,7 @@ func (s *Storage) List(ctx context.Context, loc domain.Locator) ([]domain.Artifa
 	return artifacts, nil
 }
 
-func (s *Storage) Read(ctx context.Context, loc domain.Locator) ([]byte, error) {
+func (s *Adapter) Read(ctx context.Context, loc domain.Locator) ([]byte, error) {
 	data, err := s.client.GetFileContent(
 		ctx,
 		s.owner,

@@ -25,7 +25,7 @@ func runLs(args []string, client *github.Client) error {
 		ref = args[3]
 	}
 
-	storage := github.NewStorage(client, args[0], args[1])
+	storage := github.NewAdapter(client, args[0], args[1])
 	loc := domain.NewLocator(dirpath, ref)
 
 	uc := app.NewListArtifacts(storage)
