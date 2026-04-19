@@ -1,13 +1,11 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/merulis/shuffle/src/domain"
 	"github.com/merulis/shuffle/src/github"
 )
 
@@ -21,33 +19,40 @@ func main() {
 	if token == "" {
 		fmt.Println("token is empty")
 	}
+
 	ghClient := github.NewClient(token)
-	ghStorage := github.NewStorage(ghClient, "cli", "cli")
-	items, err := ghStorage.List(
-		context.Background(),
-		domain.Locator{
-			Path: "cmd",
-			Ref:  "trunk",
-		},
-	)
-	if err != nil {
-		log.Fatal(err)
+
+	if err := run(os.Args, ghClient); err != nil {
+		fmt.Fprintln(os.Stderr, "error:", err)
+	}
+}
+
+func run(args []string, client *github.Client) error {
+	if len(args) < 2 {
+		printUsage()
+		return fmt.Errorf("command is required")
+		os.Exit(1)
 	}
 
-	for _, item := range items {
-		fmt.Printf("%-4s %-8d %s\n", item.Type, item.Size, item.Path)
-	}
+	command := args[1]
+	commandArgs := args[2:]
 
-	content, err := ghStorage.Read(
-		context.Background(),
-		domain.Locator{
-			Path: "go.mod",
-			Ref:  "trunk",
-		},
-	)
-	if err != nil {
-		log.Fatal(err)
+	switch command {
+	case "ls":
+		return runLs(commandArgs, client)
+	case "view":
+		return runView(commandArgs, client)
+	case "help":
+		printUsage()
+		return nil
+	default:
+		printUsage()
+		return fmt.Errorf("unknown commad: %s", args[1])
 	}
+}
 
-	fmt.Println(string(content))
+func printUsage() {
+	fmt.Println("usage: shuffle <command> [args]")
+	usageLs()
+	usageView()
 }
