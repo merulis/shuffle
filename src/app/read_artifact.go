@@ -24,7 +24,7 @@ func (uc *ReadArtifact) Execute(ctx context.Context, loc domain.Locator) ([]byte
 
 	data, err := uc.source.Read(ctx, loc)
 	if err != nil {
-		return nil, fmt.Errorf("user case read artifact: %w", err)
+		return nil, fmt.Errorf("read artifact: %w", err)
 	}
 
 	return data, nil

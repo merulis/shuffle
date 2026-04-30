@@ -20,7 +20,7 @@ func NewListArtifacts(source domain.Source) *ListArtifacts {
 func (uc *ListArtifacts) Execute(ctx context.Context, loc domain.Locator) ([]domain.Artifact, error) {
 	items, err := uc.source.List(ctx, loc)
 	if err != nil {
-		return nil, fmt.Errorf("user case list artifacts: %w", err)
+		return nil, fmt.Errorf("list artifacts: %w", err)
 	}
 
 	return items, nil

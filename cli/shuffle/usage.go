@@ -11,5 +11,5 @@ func usageView() {
 }
 
 func usageDownload() {
-	fmt.Println("	shuffle load <owner> <repo> <path> [ref]")
+	fmt.Println("	shuffle download <owner> <repo> <path> [ref]")
 }

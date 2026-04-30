@@ -42,7 +42,7 @@ func run(args []string, client *github.Client) error {
 		return runLs(commandArgs, client)
 	case "view":
 		return runView(commandArgs, client)
-	case "load":
+	case "download":
 		return runDownload(commandArgs, client)
 	case "help":
 		printUsage()

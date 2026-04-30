@@ -11,8 +11,8 @@ import (
 
 func runDownload(args []string, client *github.Client) error {
 	if len(args) < 3 {
-		usageView()
-		return fmt.Errorf("command donwload: bad args %v", args)
+		usageDownload()
+		return fmt.Errorf("command download: bad args %v", args)
 	}
 
 	ref := ""

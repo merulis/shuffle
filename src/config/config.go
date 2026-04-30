@@ -1,5 +1,6 @@
 package config
 
 type Config struct {
-	Token string
+	Sources []SourceConfig `json:"sources"`
+	Default string         `json:"default,omitempty"`
 }
