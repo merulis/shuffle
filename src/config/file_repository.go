@@ -1,6 +1,9 @@
 package config
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -24,12 +27,44 @@ func NewFileRepository(path string) *FileRepository {
 	}
 }
 
-func (r *FileRepository) Load() (Config,error) {
-	:
+func (r *FileRepository) Load() (Config, error) {
+	data, err := os.ReadFile(r.path)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return Config{}, nil
+		}
+		return Config{}, fmt.Errorf("read config file: %w", err)
+	}
+
+	if len(data) == 0 {
+		return Config{}, nil
+	}
+
+	var cfg Config
+	if err := json.Unmarshal(data, &cfg); err != nil {
+		return Config{}, fmt.Errorf("decode config: %w", err)
+	}
+
+	return cfg, nil
 }
 
-func (r *FileRepository) Save(cfg Config) (error) {
-	:
+func (r *FileRepository) Save(cfg Config) error {
+	dir := filepath.Dir(r.path)
+
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("create config dir: %w", err)
+	}
+
+	data, err := json.MarshalIndent(cfg, "", "  ")
+	if err != nil {
+		return fmt.Errorf("encode Config: %w", err)
+	}
+
+	if err := os.WriteFile(r.path, data, 0644); err != nil {
+		return fmt.Errorf("write config file: %w", err)
+	}
+
+	return nil
 }
 
 func defaultConfigPath() string {

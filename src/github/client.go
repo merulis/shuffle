@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	BASEURL        = "http://api.github.com"
+	BASEURL        = "https://api.github.com"
 	GH_API_VERSION = "2026-03-10"
 )
 
