@@ -53,7 +53,7 @@ func TestConfig_FileRepository_Load(t *testing.T) {
 			path := filepath.Join(t.TempDir(), "config.json")
 
 			if tt.fileContent != nil {
-				err := os.WriteFile(path, []byte(*tt.fileContent), 0644)
+				err := os.WriteFile(path, []byte(*tt.fileContent), 0o644)
 				assert.NoError(t, err)
 			}
 
@@ -102,20 +102,5 @@ func TestFileRepository_Save(t *testing.T) {
 
 			require.Equal(t, tt.cfg, got)
 		})
-	}
-}
-
-func validConfig() Config {
-	return Config{
-		Sources: []SourceConfig{
-			{
-				Name:  "gh-cli",
-				Type:  SourceTypeGithub,
-				Owner: "cli",
-				Repo:  "cli",
-				Ref:   "trunk",
-			},
-		},
-		Default: "gh-cli",
 	}
 }
