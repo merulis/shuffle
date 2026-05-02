@@ -110,11 +110,8 @@ func TestConfig_Service_Add(t *testing.T) {
 			service := NewService(repo)
 
 			targetErr := service.Add(tt.wantSource)
-			t.Logf("wantSource: %v", tt.wantSource)
 
 			source, _ := service.Get(tt.wantSource.Name)
-
-			t.Logf("actual source: %v", source)
 
 			if tt.wantErr != "" {
 				assert.ErrorContains(t, targetErr, tt.wantErr)
@@ -122,6 +119,43 @@ func TestConfig_Service_Add(t *testing.T) {
 
 			assert.NoError(t, targetErr)
 			assert.Equal(t, tt.wantSource, source)
+		})
+	}
+}
+
+func TestConfig_Service_Remove(t *testing.T) {
+	tests := []struct {
+		name        string
+		cfg         Config
+		nameRemove  string
+		repoErr     error
+		wantErr     string
+		wantSource  SourceConfig
+		wantSources []SourceConfig
+	}{
+		{
+			name:        "remove exists source",
+			cfg:         validConfigWithNamedSources([]string{"gh"}),
+			nameRemove:  "gh",
+			wantSources: []SourceConfig{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := &fakeRepository{tt.cfg, tt.repoErr}
+			service := NewService(repo)
+
+			targetErr := service.Remove(tt.nameRemove)
+
+			sources, _ := service.List()
+
+			if tt.wantErr != "" {
+				assert.ErrorContains(t, targetErr, tt.wantErr)
+			}
+
+			assert.NoError(t, targetErr)
+			assert.Equal(t, tt.wantSources, sources)
 		})
 	}
 }
