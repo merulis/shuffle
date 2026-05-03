@@ -7,11 +7,26 @@ import (
 	"github.com/merulis/shuffle/src/app"
 	"github.com/merulis/shuffle/src/domain"
 	"github.com/merulis/shuffle/src/github"
+	"github.com/spf13/cobra"
 )
 
-func runView(args []string, client *github.Client) error {
+var viewCmd = &cobra.Command{
+	Use:     "view(show) <owner> <repo> <path> [ref]",
+	Aliases: []string{"show"},
+	Short:   "Preview of artifact from a source",
+	Args:    cobra.RangeArgs(3, 4),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return runView(args)
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(viewCmd)
+}
+
+func runView(args []string) error {
+	client := NewGithubCient()
 	if len(args) < 3 {
-		usageView()
 		return fmt.Errorf("command view: bad args %v", args)
 	}
 
