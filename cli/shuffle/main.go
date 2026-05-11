@@ -3,8 +3,16 @@ Copyright © 2026 Vadim Kuleshvo  <merulis@yandex.ru>
 */
 package main
 
-import "github.com/merulis/shuffle/cli/shuffle/cmd"
+import (
+	"fmt"
+	"os"
+
+	"github.com/merulis/shuffle/cli/shuffle/cmd"
+)
 
 func main() {
-	cmd.Execute()
+	if err := cmd.NewRootCommand().Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, "error:", err)
+		os.Exit(1)
+	}
 }

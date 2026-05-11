@@ -20,10 +20,6 @@ var viewCmd = &cobra.Command{
 	},
 }
 
-func init() {
-	rootCmd.AddCommand(viewCmd)
-}
-
 func runView(args []string) error {
 	client := NewGithubCient()
 	if len(args) < 3 {
