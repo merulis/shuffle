@@ -1,4 +1,4 @@
-package cmd
+package deps
 
 import "github.com/merulis/shuffle/src/config"
 

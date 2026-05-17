@@ -1,22 +1,21 @@
-package cmd
+package utils
 
 import (
 	"fmt"
 
+	"github.com/merulis/shuffle/cli/cmd/deps"
 	"github.com/merulis/shuffle/src/config"
 	"github.com/merulis/shuffle/src/domain"
-	"github.com/merulis/shuffle/src/source"
+	"github.com/merulis/shuffle/src/sourcefactory"
 )
 
-func resolveSource(name string) (domain.Source, config.SourceConfig, error) {
-	service := NewConfigService()
-
-	sourceConfig, err := service.Get(name)
+func ResolveSource(deps deps.Deps, name string) (domain.Source, config.SourceConfig, error) {
+	sourceConfig, err := deps.ConfigService.Get(name)
 	if err != nil {
 		return nil, config.SourceConfig{}, fmt.Errorf("get source config: %w", err)
 	}
 
-	src, err := source.New(sourceConfig)
+	src, err := sourcefactory.New(sourceConfig)
 	if err != nil {
 		return nil, config.SourceConfig{}, fmt.Errorf("create source: %w", err)
 	}

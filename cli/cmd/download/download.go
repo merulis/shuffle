@@ -1,31 +1,32 @@
-package cmd
+package download
 
 import (
 	"context"
 	"fmt"
 
+	"github.com/merulis/shuffle/cli/cmd/deps"
 	"github.com/merulis/shuffle/src/app"
 	"github.com/merulis/shuffle/src/domain"
 	"github.com/merulis/shuffle/src/github"
 	"github.com/spf13/cobra"
 )
 
-var downloadCmd = &cobra.Command{
-	Use:     "download(load/pull) <owner> <repo> <path> [ref]",
-	Aliases: []string{"load", "pull"},
-	Short:   "Download artifact from a source",
-	Args:    cobra.RangeArgs(3, 4),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return runDownload(args)
-	},
-}
+func NewCmdDowload() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "download(load/pull) <owner> <repo> <path> [ref]",
+		Aliases: []string{"load", "pull"},
+		Short:   "Download artifact from a source",
+		Args:    cobra.RangeArgs(3, 4),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runDownload(args)
+		},
+	}
 
-func init() {
-	rootCmd.AddCommand(downloadCmd)
+	return cmd
 }
 
 func runDownload(args []string) error {
-	client := NewGithubCient()
+	client := deps.NewGithubCient()
 
 	if len(args) < 3 {
 		return fmt.Errorf("command download: bad args %v", args)

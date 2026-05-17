@@ -1,4 +1,4 @@
-package cmd
+package utils
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ type target struct {
 	Path       string
 }
 
-func parseTarget(input string, sep string) (target, error) {
+func ParseTarget(input string, sep string) (target, error) {
 	parts := strings.SplitN(input, sep, 2)
 	if len(parts) != 2 {
 		return target{}, fmt.Errorf("ivalid target %q, expected source:/path", input)

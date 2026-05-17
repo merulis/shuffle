@@ -8,7 +8,7 @@ import (
 
 const Version = "dev"
 
-func NewVersion() *cobra.Command {
+func NewCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:   "version",
 		Short: "Print shuffle version",

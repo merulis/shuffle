@@ -1,27 +1,32 @@
-package cmd
+package view
 
 import (
 	"context"
 	"fmt"
 
+	"github.com/merulis/shuffle/cli/cmd/deps"
 	"github.com/merulis/shuffle/src/app"
 	"github.com/merulis/shuffle/src/domain"
 	"github.com/merulis/shuffle/src/github"
 	"github.com/spf13/cobra"
 )
 
-var viewCmd = &cobra.Command{
-	Use:     "view(show) <owner> <repo> <path> [ref]",
-	Aliases: []string{"show"},
-	Short:   "Preview of artifact from a source",
-	Args:    cobra.RangeArgs(3, 4),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return runView(args)
-	},
+func NewCmdView() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "view(show) <owner> <repo> <path> [ref]",
+		Aliases: []string{"show"},
+		Short:   "Preview of artifact from a source",
+		Args:    cobra.RangeArgs(3, 4),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runView(args)
+		},
+	}
+
+	return cmd
 }
 
 func runView(args []string) error {
-	client := NewGithubCient()
+	client := deps.NewGithubCient()
 	if len(args) < 3 {
 		return fmt.Errorf("command view: bad args %v", args)
 	}

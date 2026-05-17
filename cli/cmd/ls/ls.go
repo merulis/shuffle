@@ -1,30 +1,31 @@
-package cmd
+package ls
 
 import (
 	"context"
 	"fmt"
 
+	"github.com/merulis/shuffle/cli/cmd/deps"
 	"github.com/merulis/shuffle/src/app"
 	"github.com/merulis/shuffle/src/domain"
 	"github.com/merulis/shuffle/src/github"
 	"github.com/spf13/cobra"
 )
 
-var lsCmd = &cobra.Command{
-	Use:   "ls <owner> <repo> <path> [ref]",
-	Short: "List artifacts in a source",
-	Args:  cobra.RangeArgs(3, 4),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return runLs(args)
-	},
+func NewCmdList() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "list <owner> <repo> <path> [ref]",
+		Short: "List artifacts in a source",
+		Args:  cobra.RangeArgs(3, 4),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runList(args)
+		},
+	}
+
+	return cmd
 }
 
-func init() {
-	rootCmd.AddCommand(lsCmd)
-}
-
-func runLs(args []string) error {
-	client := NewGithubCient()
+func runList(args []string) error {
+	client := deps.NewGithubCient()
 
 	if len(args) < 2 {
 		return fmt.Errorf("command ls: bad args %v", args)
