@@ -19,6 +19,8 @@ func NewCmdList2(deps deps.Deps) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runList2(deps, args)
 		},
+		SilenceUsage:  true,
+		SilenceErrors: true,
 	}
 
 	return cmd
