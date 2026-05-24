@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/merulis/shuffle/internal/cli/deps"
-	"github.com/merulis/shuffle/internal/config"
+	"github.com/merulis/shuffle/internal/source"
 	"github.com/spf13/cobra"
 )
 
@@ -14,6 +14,7 @@ type addOptions struct {
 	owner      string
 	repo       string
 	ref        string
+	credential string
 }
 
 func NewCmdSourceAdd(deps deps.Deps) *cobra.Command {
@@ -33,14 +34,15 @@ func NewCmdSourceAdd(deps deps.Deps) *cobra.Command {
 	cmd.Flags().StringVar(&opts.owner, "owner", "", "source owner")
 	cmd.Flags().StringVar(&opts.repo, "repo", "", "source repo")
 	cmd.Flags().StringVar(&opts.ref, "ref", "", "source ref")
+	cmd.Flags().StringVar(&opts.credential, "credential-ref", "", "credential ref")
 
 	return cmd
 }
 
 func runCmdSourceAdd(deps deps.Deps, opts addOptions) error {
-	err := deps.ConfigService.Add(config.SourceConfig{
+	err := deps.ConfigService.Add(source.Source{
 		Name:  opts.name,
-		Type:  config.SourceType(opts.sourceType),
+		Type:  source.SourceType(opts.sourceType),
 		Owner: opts.owner,
 		Repo:  opts.repo,
 		Ref:   opts.ref,

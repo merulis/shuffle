@@ -9,16 +9,13 @@ import (
 
 	"github.com/merulis/shuffle/internal/cli"
 	"github.com/merulis/shuffle/internal/cli/deps"
-	"github.com/merulis/shuffle/internal/config"
+	"github.com/subosito/gotenv"
 )
 
 func main() {
-	repo := config.NewFileRepository("")
-	configService := config.NewService(repo)
+	_ = gotenv.Load()
 
-	root := cli.NewCmdRoot(deps.Deps{
-		ConfigService: configService,
-	})
+	root := cli.NewCmdRoot(deps.NewDeps())
 
 	if err := root.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)

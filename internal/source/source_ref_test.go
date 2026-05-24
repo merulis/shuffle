@@ -1,4 +1,4 @@
-package utils
+package source
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCMD_Target(t *testing.T) {
+func Test_SourceRef(t *testing.T) {
 	tests := []struct {
 		name       string
 		input      string
@@ -24,7 +24,7 @@ func TestCMD_Target(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := ParseTarget(tt.input, ":")
+			result, err := ParseRef(tt.input, ":")
 
 			if tt.wantErr != "" {
 				assert.Error(t, err)
@@ -33,7 +33,7 @@ func TestCMD_Target(t *testing.T) {
 			}
 
 			assert.NoError(t, err)
-			assert.Equal(t, tt.wantSource, result.SourceName)
+			assert.Equal(t, tt.wantSource, result.Name)
 			assert.Equal(t, tt.wantPath, result.Path)
 		})
 	}

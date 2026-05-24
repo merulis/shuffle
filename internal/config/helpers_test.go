@@ -1,9 +1,11 @@
 package config
 
+import "github.com/merulis/shuffle/internal/source"
+
 func validConfig() Config {
 	name := "gh-cli"
 	return Config{
-		Sources: []SourceConfig{
+		Sources: []source.Source{
 			validSourceConfig(name),
 		},
 		Default: name,
@@ -11,7 +13,7 @@ func validConfig() Config {
 }
 
 func validConfigWithNamedSources(names []string) Config {
-	var sources []SourceConfig
+	var sources []source.Source
 	for _, name := range names {
 		sources = append(sources, validSourceConfig(name))
 	}
@@ -21,10 +23,10 @@ func validConfigWithNamedSources(names []string) Config {
 	}
 }
 
-func validSourceConfig(name string) SourceConfig {
-	return SourceConfig{
+func validSourceConfig(name string) source.Source {
+	return source.Source{
 		Name:  name,
-		Type:  SourceTypeGithub,
+		Type:  source.SourceTypeGithub,
 		Owner: "cli",
 		Repo:  "cli",
 		Ref:   "trunk",

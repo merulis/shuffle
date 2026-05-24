@@ -6,40 +6,39 @@ import (
 
 	"github.com/merulis/shuffle/internal/cli/deps"
 	"github.com/merulis/shuffle/internal/domain"
-	"github.com/merulis/shuffle/internal/provider/github"
+	"github.com/merulis/shuffle/internal/source"
 	"github.com/merulis/shuffle/internal/usecase"
 	"github.com/spf13/cobra"
 )
 
-func NewCmdView() *cobra.Command {
+func NewCmdView(deps deps.Deps) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "view(show) <owner> <repo> <path> [ref]",
-		Aliases: []string{"show"},
-		Short:   "Preview of artifact from a source",
-		Args:    cobra.RangeArgs(3, 4),
+		Use:   "view <owner> <repo> <path> [ref]",
+		Short: "Preview of artifact from a source",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runView(args)
+			input := args[0]
+			return runView(deps, input)
 		},
 	}
 
 	return cmd
 }
 
-func runView(args []string) error {
-	client := deps.NewGithubCient()
-	if len(args) < 3 {
-		return fmt.Errorf("command view: bad args %v", args)
+func runView(deps deps.Deps, input string) error {
+	sourceRef, err := source.ParseRef(input, ":")
+	if err != nil {
+		return err
 	}
 
-	ref := ""
-	if len(args) >= 4 {
-		ref = args[3]
+	providerSource, sourceConfig, err := deps.SourceResolver.Resolve(sourceRef)
+	if err != nil {
+		return err
 	}
 
-	storage := github.NewAdapter(client, args[0], args[1])
-	loc := domain.NewLocator(args[2], ref)
+	loc := domain.NewLocator(sourceRef.Path, sourceConfig.Ref)
 
-	uc := usecase.NewReadArtifact(storage)
+	uc := usecase.NewReadArtifact(providerSource)
 
 	ctx := context.Background()
 

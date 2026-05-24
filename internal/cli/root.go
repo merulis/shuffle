@@ -23,10 +23,9 @@ artifacts from configured remote sources.`,
 
 	root.AddCommand(
 		version.NewCommand(),
-		view.NewCmdView(),
-		list.NewCmdList(),
-		list.NewCmdList2(deps),
-		download.NewCmdDowload(),
+		view.NewCmdView(deps),
+		list.NewCmdList(deps),
+		download.NewCmdDowload(deps),
 		source.NewCmdSource(deps),
 	)
 

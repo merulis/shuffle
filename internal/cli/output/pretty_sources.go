@@ -5,10 +5,10 @@ import (
 	"io"
 	"text/tabwriter"
 
-	"github.com/merulis/shuffle/internal/config"
+	"github.com/merulis/shuffle/internal/source"
 )
 
-func PrintSorces(w io.Writer, sources []config.SourceConfig) error {
+func PrintSorces(w io.Writer, sources []source.Source) error {
 	if len(sources) < 1 {
 		_, err := fmt.Fprintln(w, "No sources configured")
 		return err

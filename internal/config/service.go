@@ -1,6 +1,10 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/merulis/shuffle/internal/source"
+)
 
 type Service struct {
 	repo Repository
@@ -12,7 +16,7 @@ func NewService(repo Repository) *Service {
 	}
 }
 
-func (s *Service) List() ([]SourceConfig, error) {
+func (s *Service) List() ([]source.Source, error) {
 	cfg, err := s.repo.Load()
 	if err != nil {
 		return nil, fmt.Errorf("load config: %w", err)
@@ -21,10 +25,10 @@ func (s *Service) List() ([]SourceConfig, error) {
 	return cfg.Sources, nil
 }
 
-func (s *Service) Get(name string) (SourceConfig, error) {
+func (s *Service) Get(name string) (source.Source, error) {
 	cfg, err := s.repo.Load()
 	if err != nil {
-		return SourceConfig{}, fmt.Errorf("load config: %w", err)
+		return source.Source{}, fmt.Errorf("load config: %w", err)
 	}
 
 	for _, source := range cfg.Sources {
@@ -33,10 +37,10 @@ func (s *Service) Get(name string) (SourceConfig, error) {
 		}
 	}
 
-	return SourceConfig{}, fmt.Errorf("source not found")
+	return source.Source{}, fmt.Errorf("source not found")
 }
 
-func (s *Service) Add(source SourceConfig) error {
+func (s *Service) Add(source source.Source) error {
 	cfg, err := s.repo.Load()
 	if err != nil {
 		return fmt.Errorf("load config: %w", err)

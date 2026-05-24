@@ -3,6 +3,7 @@ package config
 import (
 	"testing"
 
+	"github.com/merulis/shuffle/internal/source"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,7 +27,7 @@ func TestConfig_Service_List(t *testing.T) {
 		cfg         Config
 		repoErr     error
 		wantErr     string
-		wantSources []SourceConfig
+		wantSources []source.Source
 	}{
 		{
 			name:        "return sources",
@@ -59,7 +60,7 @@ func TestConfig_Service_Get(t *testing.T) {
 		repoErr    error
 		wantErr    string
 		wantName   string
-		wantSource SourceConfig
+		wantSource source.Source
 	}{
 		{
 			name: "found source",
@@ -95,8 +96,8 @@ func TestConfig_Service_Add(t *testing.T) {
 		cfg         Config
 		repoErr     error
 		wantErr     string
-		wantSource  SourceConfig
-		wantSources []SourceConfig
+		wantSource  source.Source
+		wantSources []source.Source
 	}{
 		{
 			name:       "add one source in empty config",
@@ -130,14 +131,14 @@ func TestConfig_Service_Remove(t *testing.T) {
 		nameRemove  string
 		repoErr     error
 		wantErr     string
-		wantSource  SourceConfig
-		wantSources []SourceConfig
+		wantSource  source.Source
+		wantSources []source.Source
 	}{
 		{
 			name:        "remove exists source",
 			cfg:         validConfigWithNamedSources([]string{"gh"}),
 			nameRemove:  "gh",
-			wantSources: []SourceConfig{},
+			wantSources: []source.Source{},
 		},
 	}
 
