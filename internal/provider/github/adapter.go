@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/merulis/shuffle/internal/domain"
+	"github.com/merulis/shuffle/internal/entity"
 )
 
 type Adapter struct {
@@ -21,7 +21,7 @@ func NewAdapter(client *Client, owner, repo string) *Adapter {
 	}
 }
 
-func (s *Adapter) List(ctx context.Context, loc domain.Locator) ([]domain.Artifact, error) {
+func (s *Adapter) List(ctx context.Context, loc entity.Locator) ([]entity.Artifact, error) {
 	items, err := s.client.GetListContent(
 		ctx,
 		s.owner,
@@ -33,7 +33,7 @@ func (s *Adapter) List(ctx context.Context, loc domain.Locator) ([]domain.Artifa
 		return nil, fmt.Errorf("get list content: %w", err)
 	}
 
-	artifacts := make([]domain.Artifact, 0, len(items))
+	artifacts := make([]entity.Artifact, 0, len(items))
 	for _, item := range items {
 		artifacts = append(artifacts, toArtifact(item))
 	}
@@ -41,7 +41,7 @@ func (s *Adapter) List(ctx context.Context, loc domain.Locator) ([]domain.Artifa
 	return artifacts, nil
 }
 
-func (s *Adapter) Read(ctx context.Context, loc domain.Locator) ([]byte, error) {
+func (s *Adapter) Read(ctx context.Context, loc entity.Locator) ([]byte, error) {
 	data, err := s.client.GetFileContent(
 		ctx,
 		s.owner,

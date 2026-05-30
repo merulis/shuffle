@@ -1,10 +1,9 @@
-package factory
+package provider
 
 import (
 	"fmt"
 	"os"
 
-	"github.com/merulis/shuffle/internal/domain"
 	"github.com/merulis/shuffle/internal/provider/github"
 	"github.com/merulis/shuffle/internal/source"
 )
@@ -15,7 +14,7 @@ func NewFactory() *Factory {
 	return &Factory{}
 }
 
-func (f *Factory) NewProvider(cfg source.Source) (domain.Source, error) {
+func (f *Factory) NewProvider(cfg source.Source) (Provider, error) {
 	switch cfg.Type {
 	case source.SourceTypeGithub:
 		token := os.Getenv("GITHUB_TOKEN")

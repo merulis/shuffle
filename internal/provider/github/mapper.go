@@ -1,23 +1,23 @@
 package github
 
-import "github.com/merulis/shuffle/internal/domain"
+import "github.com/merulis/shuffle/internal/entity"
 
-func toArtifact(item ContentItem) domain.Artifact {
-	return domain.Artifact{
+func toArtifact(item ContentItem) entity.Artifact {
+	return entity.Artifact{
 		Path: item.Path,
 		Name: item.Name,
 		Size: item.Size,
-		Type: domain.ArtifactType(item.Type),
+		Type: entity.ArtifactType(item.Type),
 	}
 }
 
-func toArtifactType(githubType string) domain.ArtifactType {
+func toArtifactType(githubType string) entity.ArtifactType {
 	switch githubType {
 	case "dir":
-		return domain.ArtifactDir
+		return entity.ArtifactDir
 	case "file":
-		return domain.ArtifactFile
+		return entity.ArtifactFile
 	default:
-		return domain.ArtifactFile
+		return entity.ArtifactFile
 	}
 }

@@ -1,22 +1,18 @@
-package source
+package provider
 
 import (
 	"fmt"
 
-	"github.com/merulis/shuffle/internal/domain"
+	s "github.com/merulis/shuffle/internal/source"
 )
 
 type ConfigProvider interface {
-	Get(name string) (Source, error)
-}
-
-type ProviderFactory interface {
-	NewProvider(source Source) (domain.Source, error)
+	Get(name string) (s.Source, error)
 }
 
 type Resolver struct {
 	configProvider  ConfigProvider
-	providerFactory ProviderFactory
+	providerFactory Factory
 }
 
 func NewResolver(provider ConfigProvider, factory ProviderFactory) *Resolver {
@@ -26,15 +22,15 @@ func NewResolver(provider ConfigProvider, factory ProviderFactory) *Resolver {
 	}
 }
 
-func (r *Resolver) Resolve(sourceRef SourceRef) (domain.Source, Source, error) {
+func (r *Resolver) Resolve(sourceRef s.SourceRef) (Provider, s.Source, error) {
 	source, err := r.configProvider.Get(sourceRef.Name)
 	if err != nil {
-		return nil, Source{}, fmt.Errorf("get source config: %w", err)
+		return nil, s.Source{}, fmt.Errorf("get source config: %w", err)
 	}
 
 	src, err := r.providerFactory.NewProvider(source)
 	if err != nil {
-		return nil, Source{}, fmt.Errorf("create source: %w", err)
+		return nil, s.Source{}, fmt.Errorf("create source: %w", err)
 	}
 
 	return src, source, nil
