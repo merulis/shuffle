@@ -7,15 +7,15 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/merulis/shuffle/internal/cli"
-	"github.com/merulis/shuffle/internal/cli/deps"
+	"github.com/merulis/shuffle/internal/app/cli/cmd"
+	cdeps "github.com/merulis/shuffle/internal/app/cli/cmd/deps"
 	"github.com/subosito/gotenv"
 )
 
 func main() {
 	_ = gotenv.Load()
 
-	root := cli.NewCmdRoot(deps.NewDeps())
+	root := cmd.NewCmdRoot(cdeps.NewDeps())
 
 	if err := root.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
